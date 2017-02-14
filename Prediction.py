@@ -1,12 +1,16 @@
-INPUT = 54
-HIDDEN = 50
-OUTPUT = 2
-
 import tensorflow as tf
 import numpy as np
 import time
 from datetime import datetime
 import pandas as pd
+import sys
+
+args = sys.argv
+
+INPUT = 54
+HIDDEN_1 = int(args[1])
+HIDDEN_2 = int(args[2])
+OUTPUT = 2
 
 start = time.time()
 
@@ -14,14 +18,18 @@ data_x = np.genfromtxt( "PredictionData_x.csv", delimiter=",", filling_values=(0
 
 x = tf.placeholder(tf.float32, [None, INPUT])
 
-w1 = tf.Variable(tf.random_normal([INPUT, HIDDEN]))
-b1 = tf.Variable(tf.random_normal([HIDDEN]))
+w1 = tf.Variable(tf.random_normal([INPUT, HIDDEN_1]))
+b1 = tf.Variable(tf.zeros([HIDDEN_1]))
 
-wy = tf.Variable(tf.random_normal([HIDDEN, OUTPUT]))
-by = tf.Variable(tf.random_normal([OUTPUT]))
+w2 = tf.Variable(tf.random_normal([HIDDEN_1, HIDDEN_2]))
+b2 = tf.Variable(tf.zeros([HIDDEN_2]))
 
-h = tf.nn.relu(tf.matmul(x, w1) + b1)
-y = tf.matmul(h, wy) + by
+wy = tf.Variable(tf.random_normal([HIDDEN_2, OUTPUT]))
+by = tf.Variable(tf.zeros([OUTPUT]))
+
+h1 = tf.nn.relu(tf.matmul(x, w1) + b1)
+h2 = tf.nn.relu(tf.matmul(h1, w2) + b2)
+y = tf.matmul(h2, wy) + by
 
 y_ = tf.placeholder(tf.float32, [None, OUTPUT])
 

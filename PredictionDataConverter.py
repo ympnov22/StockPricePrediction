@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import datetime
 
-pd_data = pd.read_csv( 'StockDataRaw.csv' , index_col = 0, header = 2)
+pd_data = pd.read_csv( 'PredictionDataRaw.csv' , index_col = 0, header = 2)
 
 #print(pd_data)
 
