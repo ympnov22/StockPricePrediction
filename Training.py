@@ -32,6 +32,8 @@ testing_loss =[]
 
 acuracy = []
 
+profit = []
+
 laptime = []
 
 for i in range(len(data_x)):
@@ -99,16 +101,25 @@ for i in range(50000):
   
     output = sess.run(y, feed_dict={x: test_x})
     
-    temp = 0
+    temp_a = 0
+    temp_p = 0
     for j in range(len(output)):
         if(output[j][1]*test_y[j][1]>0):
-            temp = temp + 1
-    temp = float(temp) / len(output)
+            temp_a = temp_a + 1
+            temp_p += abs(test_y[j][1])
+        else:
+            temp_p -= abs(test_y[j][1])
+
+    temp_a = float(temp_a) / len(output)
     
     print('acuracy is ')
-    print(temp)
-    
-    acuracy.append(temp)
+    print(temp_a)
+
+    print('profit is ')
+    print(temp_p)
+
+    acuracy.append(temp_a)
+    profit.append(temp_p)
     
 result_y = sess.run(y, feed_dict={x: test_x, y_: test_y})
 
@@ -120,6 +131,7 @@ np.savetxt("training_loss.csv", training_loss, delimiter=",")
 np.savetxt("testing_loss.csv", testing_loss, delimiter=",")
 
 np.savetxt("acuracy.csv", acuracy, delimiter=",")
+np.savetxt("profit.csv", profit, delimiter=",")
 
 elapsed_time = time.time() - start
 print("elapsed_time:{0}".format(elapsed_time) + "[sec]")
